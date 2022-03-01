@@ -167,4 +167,66 @@ $(document).ready(function () {
     })
   }
 
-  
+  // Draw weather all days
+  function drawCurWeather(cur) {
+    if (test) { console.log('drawCurWeather - cur:', cur) }
+
+    $('#forecast').empty()
+    $('#cityName').text(cur.city + " (" + cur.date + ")")
+    $('#curWeathIcn').attr("src", cur.icon)
+    $('#curTemp').text("Temp: " + cur.temp + " F")
+    $('#curHum').text("Humidity: " + cur.humidity + "%")
+    $('#curWind').text("Windspeed: " + cur.wind + " MPH")
+  }
+
+  function drawForecast(cur) {
+    if (test) { console.log('drawForecast - cur:', cur) }
+
+    for (let i = 0; i < cur.length; i++) {
+      let $colmx1 = $('<div class="col mx-1">')
+      let $cardBody = $('<div class="card-body forecast-card">')
+      let $cardTitle = $('<h5 class="card-title">')
+      $cardTitle.text(cur[i].date)
+
+
+      let $ul = $('<ul>')
+
+      let $iconLi = $('<li>')
+      let $iconI = $('<img>')
+      $iconI.attr('src', cur[i].icon)
+
+      let $weathLi = $('<li>')
+      $weathLi.text(cur[i].weather)
+
+      let $tempMinLi = $('<li>')
+      $tempMinLi.text('Min Temp: ' + cur[i].minTemp + " F")
+
+      let $tempMaxLi = $('<li>')
+      $tempMaxLi.text('Max Temp: ' + cur[i].maxTemp + " F")
+
+      let $humLi = $('<li>')
+      $humLi.text('Humidity: ' + cur[i].humidity + "%")
+
+      // Assemble elements
+      $iconLi.append($iconI)
+
+      $ul.append($iconLi)
+      $ul.append($weathLi)
+      $ul.append($tempMinLi)
+      $ul.append($tempMaxLi)
+      $ul.append($humLi)
+
+      $cardTitle.append($ul)
+      $cardBody.append($cardTitle)
+      $colmx1.append($cardBody)
+
+      $('#forecast').append($colmx1)
+    }
+  }
+
+  function getUvIndex(uvLoc) {
+    if (test) { console.log('getUvIndex loc:', uvLoc) }
+
+
+    city = `lat=${parseInt(uvLoc.coord.lat)}&lon=${parseInt(uvLoc.coord.lon)}`
+
