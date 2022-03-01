@@ -7,10 +7,10 @@ $(document).ready(function () {
   let query = ""
   //
 
-  // pull current location
+  //Pull current location
   $('#getWeather,#past-cities').on('click', function () {
     if (test) console.log("on click")
-    // Asking user for location from input box
+    //Asking user for location from input box
     let e = $(event.target)[0]
     let location = ""
 
@@ -30,13 +30,13 @@ $(document).ready(function () {
     getForecastWeather(location)
   })
 
-  // convert the unix epoch to local time
+  //Convert the unix epoch to local time
   function convertDate(epoch) {
     if (test) { console.log(`convertData - epoch: ${epoch}`) }
     let readable = []
     let myDate = new Date(epoch * 1000)
 
-    // local time
+    //Local time
     readable[0] = (myDate.toLocaleString())
     readable[1] = ((myDate.toLocaleString().split(", "))[0])
     readable[2] = ((myDate.toLocaleString().split(", "))[1])
@@ -75,6 +75,50 @@ $(document).ready(function () {
     } else {
       navigator.geolocation.getCurrentPosition(success, error)
     }
+  }
+
+  //Current weather conditions
+  function getCurWeather(loc) {
+    if (test) { console.log("getCurWeather - loc:", loc) }
+    if (test) { console.log("getCurWeather - toloc:", typeof loc) }
+
+    drawHistory()
+    //Clear search field
+    $('#city-search').val("")
+
+    if (typeof loc === "object") {
+      city = `lat=${loc.latitude}&lon=${loc.longitude}`
+    } else {
+      city = `q=${loc}`
+    }
+
+    //Set queryURL based on type of query
+    requestType = 'weather'
+    query = `?${city}&units=imperial&appid=${apiKey}`
+    queryURL = `${url}${requestType}${query}`
+
+    //Using AJAX call to grab data in console
+    if (test) console.log(`cur queryURL: ${queryURL}`)
+    $.ajax({
+      url: queryURL,
+      method: 'GET'
+    }).then(function (response) {
+      if (test) console.log(response)
+
+      weatherObj = {
+        city: `${response.name}`,
+        wind: response.wind.speed,
+        humidity: response.main.humidity,
+        temp: response.main.temp,
+        date: (convertDate(response.dt))[1],
+        icon: `http://openweathermap.org/img/w/${response.weather[0].icon}.png`,
+        desc: response.weather[0].description
+      }
+
+      // Calling to draw search results to page
+      drawCurWeather(weatherObj)
+      getUvIndex(response)
+    })
   }
 
   
