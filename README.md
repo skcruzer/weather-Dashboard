@@ -34,9 +34,7 @@ The following image demonstrates the application functionality:
 
 ![weather dashboard demo](./Assets/06-server-side-apis-homework-demo.png)
 
-## Review
-
-You are required to submit the following for review:
+## You are required to submit the following for review:
 
 * The URL of the deployed application.
 
