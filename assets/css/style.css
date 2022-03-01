@@ -10,6 +10,7 @@ li {
 .navbar {
   padding: 18px;
 }
+
 .col {
   padding: 5px;
 }
@@ -27,3 +28,19 @@ li {
   height: 110%;
 }
 
+.cityList {
+  border: solid;
+  border-width: thin;
+  margin: 5px;
+  padding-left: 2px;
+  background-color: lightgrey;
+}
+
+.cityList:hover {
+  background-color: greenyellow;
+  color: white;
+}
+
+.container {
+  margin-top: 5px;
+}
