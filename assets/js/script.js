@@ -121,4 +121,50 @@ $(document).ready(function () {
     })
   }
 
+  // Function to log 5-day forecast
+  function getForecastWeather(loc) {
+    if (test) { console.log("getForecastWeather - loc:", loc) }
+
+
+
+    if (typeof loc === "object") {
+      city = `lat=${loc.latitude}&lon=${loc.longitude}`
+    } else {
+      city = `q=${loc}`
+    }
+
+    let weatherArr = []
+    let weatherObj = {}
+
+    // Set queryURL based on type of query
+    requestType = 'forecast/daily'
+    query = `?${city}&cnt=6&units=imperial&appid=${apiKey}`
+    queryURL = `${url}${requestType}${query}`
+
+    // Create an AJAX call to retrieve data Log the data in console
+    $.ajax({
+      url: queryURL,
+      method: 'GET'
+    }).then(function (response) {
+      if (test) console.log("getForecast response", response)
+
+      for (let i = 1; i < response.list.length; i++) {
+        let cur = response.list[i]
+
+        weatherObj = {
+          weather: cur.weather[0].description,
+          icon: `http://openweathermap.org/img/w/${cur.weather[0].icon}.png`,
+          minTemp: cur.temp.min,
+          maxTemp: cur.temp.max,
+          humidity: cur.humidity,
+          date: (convertDate(cur.dt))[1]
+        }
+
+        weatherArr.push(weatherObj)
+      }
+
+      drawForecast(weatherArr)
+    })
+  }
+
   
