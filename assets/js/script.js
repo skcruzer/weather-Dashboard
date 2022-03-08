@@ -1,11 +1,9 @@
 $(document).ready(function () {
   let test = false
-  //School key used to get forecast data
   const apiKey = "166a433c57516f51dfab1f7edaed8413"
   let url = 'https://api.openweathermap.org/data/2.5/'
   let requestType = ""
   let query = ""
-  //
 
   //Pull current location
   $('#getWeather,#past-cities').on('click', function () {
@@ -230,3 +228,65 @@ $(document).ready(function () {
 
     city = `lat=${parseInt(uvLoc.coord.lat)}&lon=${parseInt(uvLoc.coord.lon)}`
 
+    // Set queryURL based on type of query
+    requestType = 'uvi'
+    query = `?${city}&appid=${apiKey}`
+    queryURL = `${url}${requestType}${query}`
+
+    // Create an ajax call to retrieve data Log the data in console, give color to UV Index
+    $.ajax({
+      url: queryURL,
+      method: 'GET'
+    }) .then(function (response) {
+      let bkcolor = "violet"
+
+      let uv = parseFloat(response.value)
+
+      if (uv < 3) {
+        bkcolor = 'green'
+      } else if (uv < 6) {
+        bkcolor = 'yellow'
+      } else if (uv < 8) {
+        bkcolor = 'orange'
+      } else if (uv < 11) {
+        bkcolor = 'red'
+      }
+
+      let title = '<span>UV Index: </span>'
+      let color = title + `<span style="background-color: ${bkcolor}; padding: 0 7px 0 7px;">${response.value}</span>`
+
+      $('#curUv').html(color)
+    })
+  }
+
+  function updateCityStore(city) {
+    let cityList = JSON.parse(localStorage.getItem("cityList")) || []
+    cityList.push(city)
+    cityList.sort()
+
+    // Removes duplicate cities
+    for (let i = 1; i < cityList.length; i++) {
+      if (cityList[i] === cityList[i - 1]) cityList.splice(i, 1)
+    }
+
+    // Stores in local storage
+    localStorage.setItem('cityList', JSON.stringify(cityList))
+  }
+
+  // Pull city history from local storage
+  function drawHistory() {
+    if (test) console.log('getHistory')
+    let cityList = JSON.parse(localStorage.getItem("cityList")) || []
+
+    $('#past-cities').empty()
+    cityList.forEach(function (city) {
+      let cityNameDiv = $('<div>')
+      cityNameDiv.addClass("cityList")
+      cityNameDiv.attr("value", city)
+      cityNameDiv.text(city)
+      $('#past-cities').append(cityNameDiv)
+    })
+  }
+
+  const location = getCurLocation()
+})

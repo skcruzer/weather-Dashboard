@@ -30,15 +30,17 @@ WHEN I open the weather dashboard
 THEN I am presented with the last searched city forecast
 ```
 
-The following image demonstrates the application functionality:
+## Examples of Deployed Application
 
-![weather dashboard demo](./Assets/06-server-side-apis-homework-demo.png)
+![dashboard](./Images/weatherDashboard.png)
 
 ## You are required to submit the following for review:
 
 * The URL of the deployed application.
+* [https://skcruzer.github.io/weather-Dashboard/]
 
 * The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+* [https://github.com/skcruzer/weather-Dashboard]
 
 - - -
 © Skcruzer 2022
